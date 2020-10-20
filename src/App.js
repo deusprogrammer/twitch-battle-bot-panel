@@ -1,11 +1,11 @@
 import React from 'react';
 import './App.css';
 
-import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import EncounterPanel from './routes/EncounterPanel';
 import NotificationPanel from './routes/NotificationPanel';
- 
+
 class App extends React.Component {
     render() {
         return (

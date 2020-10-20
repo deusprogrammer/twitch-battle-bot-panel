@@ -19,17 +19,17 @@ export default class EncounterPanel extends React.Component {
                 return eventData.encounterTable[mobName];
             });
 
-            this.setState({mobs});
+            this.setState({ mobs });
         };
-    
+
         ws.onclose = async (e) => {
             console.log('Socket is closed. Reconnect will be attempted in 5 second.', e.reason);
-            this.setState({mobs: []});
+            this.setState({ mobs: [] });
             setTimeout(async () => {
                 this.connect();
             }, 5000);
         };
-    
+
         ws.onerror = async (err) => {
             console.error('Socket encountered error: ', err.message, 'Closing socket');
             ws.close();
@@ -42,9 +42,9 @@ export default class EncounterPanel extends React.Component {
 
     render() {
         return (
-            <div style={{width: "80%", margin: "auto"}}>
-                {this.state.mobs.length > 0 ? <h3 style={{textAlign: "center", color: "white", WebkitTextStroke: "1px black"}}>Monsters in Chat</h3> : null}
-                <div style={{fontSize: "17px", fontWeight: "bold", color: "white", WebkitTextStroke: "1px black"}}>
+            <div style={{ width: "80%", margin: "auto" }}>
+                {this.state.mobs.length > 0 ? <h3 style={{ textAlign: "center", color: "white", WebkitTextStroke: "1px black" }}>Monsters in Chat</h3> : null}
+                <div style={{ fontSize: "17px", fontWeight: "bold", color: "white", WebkitTextStroke: "1px black" }}>
                     <div>
                         {this.state.mobs.map((mob) => {
                             let color = "";
@@ -63,15 +63,15 @@ export default class EncounterPanel extends React.Component {
                                     color = "gray";
                             }
                             return (
-                                <div style={{backgroundColor: color, width: "200px", padding: "10px", margin: "10px auto"}} key={`${mob.spawnKey}`}>
-                                    <div style={{textAlign: "center"}}><strong>{mob.name}</strong></div>
+                                <div style={{ backgroundColor: color, width: "200px", padding: "10px", margin: "10px auto" }} key={`${mob.spawnKey}`}>
+                                    <div style={{ textAlign: "center" }}><strong>{mob.name}</strong></div>
                                     <div><strong>HP</strong>: {mob.hp}/{mob.maxHp}</div>
                                     <hr />
-                                    <div style={{textAlign: "center"}}>To Attack:</div>
-                                    <div style={{textAlign: "center"}}><strong>!attack ~{mob.spawnKey}</strong></div>
+                                    <div style={{ textAlign: "center" }}>To Attack:</div>
+                                    <div style={{ textAlign: "center" }}><strong>!attack ~{mob.spawnKey}</strong></div>
                                 </div>
                             );
-                    })}
+                        })}
                     </div>
                 </div>
             </div>
