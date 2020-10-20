@@ -2,15 +2,14 @@ import React from 'react';
 
 import { w3cwebsocket as W3CWebSocket } from "websocket";
 
-const client = new W3CWebSocket('ws://localhost:8090');
-
 export default class EncounterPanel extends React.Component {
     state = {
         mobs: []
     };
 
-    componentDidMount = async () => {
-        client.onmessage = async (message) => {
+    connect = async () => {
+        const ws = new W3CWebSocket('ws://localhost:8090');
+        ws.onmessage = async (message) => {
             let event = JSON.parse(message.data);
             let eventData = event.eventData;
             let mobs = [];
@@ -22,7 +21,24 @@ export default class EncounterPanel extends React.Component {
 
             this.setState({mobs});
         };
-      }
+    
+        ws.onclose = async (e) => {
+            console.log('Socket is closed. Reconnect will be attempted in 5 second.', e.reason);
+            this.setState({mobs: []});
+            setTimeout(async () => {
+                this.connect();
+            }, 5000);
+        };
+    
+        ws.onerror = async (err) => {
+            console.error('Socket encountered error: ', err.message, 'Closing socket');
+            ws.close();
+        };
+    }
+
+    componentDidMount = async () => {
+        this.connect();
+    }
 
     render() {
         return (
