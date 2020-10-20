@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { w3cwebsocket as W3CWebSocket } from "websocket";
+import Monster from '../components/Monster';
 
 export default class EncounterPanel extends React.Component {
     state = {
@@ -43,33 +44,12 @@ export default class EncounterPanel extends React.Component {
     render() {
         return (
             <div style={{ width: "80%", margin: "auto" }}>
-                {this.state.mobs.length > 0 ? <h3 style={{ textAlign: "center", color: "white", WebkitTextStroke: "1px black" }}>Monsters in Chat</h3> : null}
+                {this.state.mobs.filter(mob => mob.hp > 0).length > 0 ? <h3 style={{ textAlign: "center", color: "white", WebkitTextStroke: "1px black" }}>Monsters in Chat</h3> : null}
                 <div style={{ fontSize: "17px", fontWeight: "bold", color: "white", WebkitTextStroke: "1px black" }}>
                     <div>
                         {this.state.mobs.map((mob) => {
-                            let color = "";
-                            switch (mob.type) {
-                                case "ELITE":
-                                    color = "blue";
-                                    break;
-                                case "BOSS":
-                                    color = "purple";
-                                    break;
-                                case "RARE":
-                                    color = "orange";
-                                    break;
-                                case "MOB":
-                                default:
-                                    color = "gray";
-                            }
                             return (
-                                <div style={{ backgroundColor: color, width: "200px", padding: "10px", margin: "10px auto" }} key={`${mob.spawnKey}`}>
-                                    <div style={{ textAlign: "center" }}><strong>{mob.name}</strong></div>
-                                    <div><strong>HP</strong>: {mob.hp}/{mob.maxHp}</div>
-                                    <hr />
-                                    <div style={{ textAlign: "center" }}>To Attack:</div>
-                                    <div style={{ textAlign: "center" }}><strong>!attack ~{mob.spawnKey}</strong></div>
-                                </div>
+                                <Monster mob={mob} key={`mob-${mob.spawnKey}`} />
                             );
                         })}
                     </div>
