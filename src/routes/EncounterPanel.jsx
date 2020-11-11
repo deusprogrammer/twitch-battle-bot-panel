@@ -3,13 +3,24 @@ import React from 'react';
 import { w3cwebsocket as W3CWebSocket } from "websocket";
 import Monster from '../components/Monster';
 
+let urlParams = new URLSearchParams(window.location.search);
+
 export default class EncounterPanel extends React.Component {
     state = {
         mobs: []
     };
 
     connect = async () => {
-        const ws = new W3CWebSocket('ws://localhost:8090');
+        const ws = new W3CWebSocket('wss://deusprogrammer.com/api/ws/twitch');
+
+        ws.onopen = () => {
+            ws.send(JSON.stringify({
+                type: "REGISTER_PANEL",
+                from: "PANEL",
+                channelId: urlParams.get("channelId")
+            }));
+        };
+
         ws.onmessage = async (message) => {
             let event = JSON.parse(message.data);
             let eventData = event.eventData;

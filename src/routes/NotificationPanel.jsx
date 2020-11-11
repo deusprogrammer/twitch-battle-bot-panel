@@ -2,6 +2,8 @@ import React from 'react';
 
 import { w3cwebsocket as W3CWebSocket } from "websocket";
 
+let urlParams = new URLSearchParams(window.location.search);
+
 export default class NotificationPanel extends React.Component {
     state = {
         messages: [],
@@ -11,7 +13,22 @@ export default class NotificationPanel extends React.Component {
     };
 
     connect = async () => {
-        const ws = new W3CWebSocket('ws://localhost:8090');
+        const ws = new W3CWebSocket('wss://deusprogrammer.com/api/ws/twitch');
+
+        ws.onopen = () => {
+            ws.send(JSON.stringify({
+                type: "REGISTER_PANEL",
+                from: "PANEL",
+                channelId: urlParams.get("channelId")
+            }));
+
+            ws.send(JSON.stringify({
+                type: "INIT_PANEL",
+                from: "PANEL",
+                channelId: urlParams.get("channelId")
+            }));
+        };
+
         ws.onmessage = async (message) => {
             console.log("MESSAGE: " + message.data);
             let messages = [...this.state.messages];
@@ -71,9 +88,9 @@ export default class NotificationPanel extends React.Component {
             } else {
                 setTimeout(async () => {
                     this.fadeOut();
-                }, 2000)
+                }, 500)
             }
-        }, 10);
+        }, 5);
     }
 
     fadeOut = async () => {
@@ -86,7 +103,7 @@ export default class NotificationPanel extends React.Component {
             } else {
                 this.setState({readyForNew: true});
             }
-        }, 10);
+        }, 5);
     }
 
     render() {
