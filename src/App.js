@@ -12,8 +12,8 @@ class App extends React.Component {
             <div>
                 <Router>
                     <Switch>
-                        <Route path="/encounters" component={EncounterPanel} />
-                        <Route path="/notifications" component={NotificationPanel} />
+                        <Route path={`${process.env.PUBLIC_URL}/encounters`} component={EncounterPanel} />
+                        <Route path={`${process.env.PUBLIC_URL}/notifications`} component={NotificationPanel} />
                     </Switch>
                 </Router>
             </div>
